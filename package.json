@@ -1,0 +1,91 @@
+{
+  "name": "modern-toasts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A modern, lightweight toast notification library with beautiful stacked animations and TypeScript support",
+  "main": "dist/modern-toasts.cjs.js",
+  "module": "dist/modern-toasts.esm.js",
+  "browser": "dist/modern-toasts.min.js",
+  "umd": "dist/modern-toasts.umd.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/modern-toasts.esm.js",
+      "require": "./dist/modern-toasts.cjs.js",
+      "browser": "./dist/modern-toasts.min.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "CONTRIBUTING.md",
+    "API.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "rollup -c && node scripts/create-gzipped.cjs",
+    "build:dev": "rollup -c",
+    "dev": "rollup -c -w",
+    "serve": "http-server examples -p 8080 -o",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "size": "node scripts/check-size.cjs",
+    "prepublishOnly": "npm run lint && npm test && npm run build",
+    "prepack": "npm run build"
+  },
+  "keywords": [
+    "toast",
+    "toasts",
+    "notification",
+    "notifications",
+    "popup",
+    "alert",
+    "snackbar",
+    "message",
+    "vanilla-js",
+    "typescript",
+    "animations",
+    "stacked",
+    "modern",
+    "lightweight",
+    "zero-dependencies",
+    "responsive",
+    "accessibility",
+    "a11y"
+  ],
+  "author": {
+    "name": "Sukarth Acharya",
+    "email": "sukarthacharya@gmail.com",
+    "url": "https://github.com/sukarth"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/jest": "^29.5.11",
+    "@typescript-eslint/eslint-plugin": "^6.16.0",
+    "@typescript-eslint/parser": "^6.16.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "rollup": "^4.9.0",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.8.1",
+    "typescript": "^5.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sukarth/ModernToasts.git"
+  },
+  "homepage": "https://sukarth.github.io/ModernToasts-Demo/",
+  "bugs": {
+    "url": "https://github.com/sukarth/ModernToasts/issues"
+  }
+}

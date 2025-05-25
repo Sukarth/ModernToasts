@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModernToasts - NPM/ES Modules Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .demo-container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #06b6d4, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .code-section {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+            border: 1px solid #334155;
+        }
+
+        .code-title {
+            color: #e2e8f0;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .code {
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-success { background-color: #22c55e; }
+        .btn-success:hover { background-color: #16a34a; }
+        .btn-error { background-color: #ef4444; }
+        .btn-error:hover { background-color: #dc2626; }
+        .btn-info { background-color: #3b82f6; }
+        .btn-info:hover { background-color: #2563eb; }
+        .btn-warning { background-color: #eab308; color: #000; }
+        .btn-warning:hover { background-color: #ca8a04; }
+
+        .feature-list {
+            text-align: left;
+            margin: 2rem 0;
+            color: #cbd5e1;
+        }
+
+        .feature-list li {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .config-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #475569;
+            background: rgba(51, 65, 85, 0.5);
+            color: #e2e8f0;
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .config-btn:hover {
+            background: rgba(71, 85, 105, 0.7);
+            border-color: #64748b;
+        }
+
+        .config-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="title">📦 ModernToasts</h1>
+        <p class="subtitle">
+            ES Modules / NPM Package Example<br>
+            Import and use ModernToasts in your modern JavaScript projects
+        </p>
+
+        <div class="code-section">
+            <div class="code-title">📥 Installation</div>
+            <div class="code">npm install modern-toasts
+# or
+yarn add modern-toasts</div>
+        </div>
+
+        <div class="code-section">
+            <div class="code-title">🚀 Basic Usage</div>
+            <div class="code">import toast from 'modern-toasts';
+
+// Simple usage
+toast.success('Hello World!');
+toast.error('Something went wrong');
+toast.info('Here is some info');
+toast.warning('Be careful!');
+
+// With options
+toast.success('Custom toast!', {
+  autoDismiss: 5000,
+  position: 'top-right',
+  backgroundColor: '#custom-color'
+});</div>
+        </div>
+
+        <div class="code-section">
+            <div class="code-title">⚙️ Configuration</div>
+            <div class="code">import toast from 'modern-toasts';
+
+// Configure globally
+toast.configure({
+  position: 'bottom-right',
+  maxVisibleStackToasts: 3,
+  defaultDuration: 4000,
+  enableBorderAnimation: true
+});
+
+// Create custom instance
+import { ModernToasts } from 'modern-toasts';
+const customToasts = new ModernToasts({
+  position: 'top-left',
+  maxVisibleStackToasts: 5
+});</div>
+        </div>
+
+        <div class="button-grid">
+            <button class="btn btn-success" onclick="showSuccess()">
+                ✅ Success
+            </button>
+            <button class="btn btn-error" onclick="showError()">
+                ❌ Error
+            </button>
+            <button class="btn btn-info" onclick="showInfo()">
+                ℹ️ Info
+            </button>
+            <button class="btn btn-warning" onclick="showWarning()">
+                ⚠️ Warning
+            </button>
+        </div>
+
+        <div class="code-section">
+            <div class="code-title">🎮 Interactive Configuration</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem; margin: 1rem 0;">
+                <button class="config-btn" onclick="setPosition('top-left')">Top Left</button>
+                <button class="config-btn" onclick="setPosition('top-center')">Top Center</button>
+                <button class="config-btn" onclick="setPosition('top-right')">Top Right</button>
+                <button class="config-btn" onclick="setPosition('bottom-left')">Bottom Left</button>
+                <button class="config-btn" onclick="setPosition('bottom-center')">Bottom Center</button>
+                <button class="config-btn active" onclick="setPosition('bottom-right')">Bottom Right</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.5rem; margin: 1rem 0;">
+                <button class="config-btn" onclick="testCustomStyling()">Custom Style</button>
+                <button class="config-btn" onclick="testLongDuration()">Long Duration</button>
+                <button class="config-btn" onclick="testNoAutoClose()">No Auto Close</button>
+                <button class="config-btn" onclick="testMultipleToasts()">Multiple Toasts</button>
+            </div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button class="btn" style="background: #6b7280;" onclick="dismissAll()">
+                    🗑️ Dismiss All
+                </button>
+            </div>
+        </div>
+
+        <div class="code-section">
+            <div class="code-title">✨ Features</div>
+            <ul class="feature-list">
+                <li>🎨 Beautiful stacked animations</li>
+                <li>📱 Fully responsive design</li>
+                <li>♿ Accessibility compliant</li>
+                <li>🎯 TypeScript support</li>
+                <li>🪶 Lightweight (~8KB minified)</li>
+                <li>🔧 Highly customizable</li>
+                <li>🚀 Zero dependencies</li>
+                <li>📦 Multiple import methods</li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            Using ModernToasts as ES Module • Modern JavaScript
+        </div>
+    </div>
+
+    <!-- Use ES modules -->
+    <script type="module">
+        // Import from the built ES module
+        import toast from '../dist/modern-toasts.esm.js';
+
+        // Configure
+        toast.configure({
+            position: 'bottom-right',
+            maxVisibleStackToasts: 4,
+            defaultDuration: 4000
+        });
+
+        // Make functions available globally for the buttons
+        window.showSuccess = () => {
+            toast.success('ES Module import working perfectly! 🎉', {
+                autoDismiss: 5000
+            });
+        };
+
+        window.showError = () => {
+            toast.error('This is an error message from ES modules.', {
+                autoDismiss: 6000
+            });
+        };
+
+        window.showInfo = () => {
+            toast.info('ES modules provide better tree-shaking and modern bundling.', {
+                autoDismiss: 5000
+            });
+        };
+
+        window.showWarning = () => {
+            toast.warning('Remember to build your project for production!', {
+                autoDismiss: 5000
+            });
+        };
+
+        // Configuration functions
+        window.setPosition = (position) => {
+            // Update active button
+            document.querySelectorAll('.config-btn').forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(position.replace('-', ' '))) {
+                    btn.classList.add('active');
+                } else if (btn.textContent.toLowerCase().includes('top') ||
+                          btn.textContent.toLowerCase().includes('bottom') ||
+                          btn.textContent.toLowerCase().includes('left') ||
+                          btn.textContent.toLowerCase().includes('right') ||
+                          btn.textContent.toLowerCase().includes('center')) {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            toast.configure({ position });
+            toast.info(`Position changed to: ${position}`, { autoDismiss: 3000 });
+        };
+
+        window.testCustomStyling = () => {
+            toast.success('🎨 Custom styled toast with dark theme!', {
+                backgroundColor: '#0f172a',
+                textColor: '#f1f5f9',
+                borderColor: '#22d3ee',
+                autoDismiss: 6000
+            });
+        };
+
+        window.testLongDuration = () => {
+            toast.info('This toast will stay for 10 seconds', {
+                autoDismiss: 10000
+            });
+        };
+
+        window.testNoAutoClose = () => {
+            toast.warning('This toast won\'t auto-close. Click X to dismiss.', {
+                autoDismiss: 0
+            });
+        };
+
+        window.testMultipleToasts = () => {
+            const messages = [
+                'First ES module toast',
+                'Second ES module toast',
+                'Third ES module toast',
+                'Fourth ES module toast'
+            ];
+            const types = ['success', 'error', 'info', 'warning'];
+            
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    toast[types[index]](message, { autoDismiss: 3000 });
+                }, index * 500);
+            });
+        };
+
+        window.dismissAll = () => {
+            toast.dismissAll();
+        };
+
+        // Show welcome message
+        setTimeout(() => {
+            toast.info('Welcome! This example uses ES module imports. Try the interactive features below!', {
+                autoDismiss: 6000
+            });
+        }, 1000);
+    </script>
+</body>
+</html>

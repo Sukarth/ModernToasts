@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModernToasts - Script Tag Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        .demo-container {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #38bdf8, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background-color: #22c55e;
+        }
+
+        .btn-success:hover {
+            background-color: #16a34a;
+        }
+
+        .btn-error {
+            background-color: #ef4444;
+        }
+
+        .btn-error:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-info {
+            background-color: #3b82f6;
+        }
+
+        .btn-info:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-warning {
+            background-color: #eab308;
+            color: #000;
+        }
+
+        .btn-warning:hover {
+            background-color: #ca8a04;
+        }
+
+        .config-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .config-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .config-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #475569;
+            background: rgba(51, 65, 85, 0.5);
+            color: #e2e8f0;
+            border-radius: 0.375rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .config-btn:hover {
+            background: rgba(71, 85, 105, 0.7);
+            border-color: #64748b;
+        }
+
+        .config-btn.active {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: white;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="title">🍞 ModernToasts</h1>
+        <p class="subtitle">
+            A modern, lightweight toast notification library with beautiful stacked animations.
+            Click the buttons below to see it in action!
+        </p>
+
+        <div class="button-grid">
+            <button class="btn btn-success" onclick="showSuccess()">
+                ✅ Success
+            </button>
+            <button class="btn btn-error" onclick="showError()">
+                ❌ Error
+            </button>
+            <button class="btn btn-info" onclick="showInfo()">
+                ℹ️ Info
+            </button>
+            <button class="btn btn-warning" onclick="showWarning()">
+                ⚠️ Warning
+            </button>
+        </div>
+
+        <div class="config-section">
+            <h3 class="config-title">Position</h3>
+            <div class="config-grid">
+                <button class="config-btn" onclick="setPosition('top-left')">Top Left</button>
+                <button class="config-btn" onclick="setPosition('top-center')">Top Center</button>
+                <button class="config-btn" onclick="setPosition('top-right')">Top Right</button>
+                <button class="config-btn" onclick="setPosition('bottom-left')">Bottom Left</button>
+                <button class="config-btn" onclick="setPosition('bottom-center')">Bottom Center</button>
+                <button class="config-btn active" onclick="setPosition('bottom-right')">Bottom Right</button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h3 class="config-title">Animation Direction</h3>
+            <div class="config-grid">
+                <button class="config-btn active" onclick="setAnimationDirection('left-to-right')">Left → Right</button>
+                <button class="config-btn" onclick="setAnimationDirection('right-to-left')">Right → Left</button>
+                <button class="config-btn" onclick="setAnimationDirection('top-to-bottom')">Top → Bottom</button>
+                <button class="config-btn" onclick="setAnimationDirection('bottom-to-top')">Bottom → Top</button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h3 class="config-title">Stack Settings</h3>
+            <div class="config-grid">
+                <button class="config-btn" onclick="setMaxVisible(1)">Max 1</button>
+                <button class="config-btn" onclick="setMaxVisible(2)">Max 2</button>
+                <button class="config-btn active" onclick="setMaxVisible(3)">Max 3</button>
+                <button class="config-btn" onclick="setMaxVisible(4)">Max 4</button>
+                <button class="config-btn" onclick="setMaxVisible(5)">Max 5</button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h3 class="config-title">Animation Control</h3>
+            <div class="config-grid">
+                <button class="config-btn active" onclick="toggleBorderAnimation()">Border: ON</button>
+                <button class="config-btn active" onclick="toggleFillAnimation()">Fill: ON</button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h3 class="config-title">Test Features</h3>
+            <div class="config-grid">
+                <button class="config-btn" onclick="testCustomStyling()">Custom Style</button>
+                <button class="config-btn" onclick="testLongDuration()">Long Duration</button>
+                <button class="config-btn" onclick="testNoAutoClose()">No Auto Close</button>
+                <button class="config-btn" onclick="testMultipleToasts()">Multiple Toasts</button>
+                <button class="config-btn" onclick="testAllDirections()">All Directions</button>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <button class="btn" style="background: #6b7280;" onclick="dismissAll()">
+                🗑️ Dismiss All
+            </button>
+        </div>
+
+        <div class="footer">
+            Using ModernToasts via script tag • No build required
+        </div>
+    </div>
+
+    <!-- Include ModernToasts library -->
+    <script src="../dist/modern-toasts.min.js"></script>
+
+    <script>
+        // Access the toast API from the global ModernToasts object
+        const { toast } = window.ModernToasts;
+
+        // Default animation directions based on position
+        const defaultAnimations = {
+            'top-left': 'right-to-left',
+            'bottom-left': 'right-to-left',
+            'top-right': 'left-to-right',
+            'bottom-right': 'left-to-right',
+            'top-center': 'bottom-to-top',
+            'bottom-center': 'top-to-bottom'
+        };
+
+        // State tracking
+        let currentConfig = {
+            position: 'bottom-right',
+            maxVisibleStackToasts: 3,
+            defaultDuration: 4000,
+            animationDirection: defaultAnimations['bottom-right'],
+            enableBorderAnimation: true,
+            enableFillAnimation: true,
+            animationDuration: 350
+        };
+
+        // Configure initial settings
+        toast.configure(currentConfig);
+
+        // Toast functions
+        function showSuccess() {
+            toast.success('Operation completed successfully! 🎉', {
+                autoDismiss: 5000
+            });
+        }
+
+        function showError() {
+            toast.error('Something went wrong. Please try again.', {
+                autoDismiss: 6000
+            });
+        }
+
+        function showInfo() {
+            toast.info('Here is some useful information for you.', {
+                autoDismiss: 4000
+            });
+        }
+
+        function showWarning() {
+            toast.warning('Please be aware of potential issues.', {
+                autoDismiss: 5000
+            });
+        }
+
+        // Configuration functions
+        function setPosition(position) {
+            updateActiveButton(event.target, 'Position');
+            currentConfig.position = position;
+            
+            // Set default animation direction for the new position
+            const defaultAnimation = defaultAnimations[position];
+            currentConfig.animationDirection = defaultAnimation;
+            
+            // Update the animation direction buttons to show the new default
+            updateAnimationDirectionButtons(defaultAnimation);
+            
+            toast.configure({ position });
+        }
+
+        function setAnimationDirection(direction) {
+            updateActiveButton(event.target, 'Animation Direction');
+            currentConfig.animationDirection = direction;
+            toast.configure({ animationDirection: direction });
+        }
+
+        function setMaxVisible(max) {
+            updateActiveButton(event.target, 'Stack Settings');
+            currentConfig.maxVisibleStackToasts = max;
+            toast.configure({ maxVisibleStackToasts: max });
+        }
+
+        function toggleBorderAnimation() {
+            currentConfig.enableBorderAnimation = !currentConfig.enableBorderAnimation;
+            event.target.textContent = `Border: ${currentConfig.enableBorderAnimation ? 'ON' : 'OFF'}`;
+            event.target.classList.toggle('active');
+            toast.configure({ enableBorderAnimation: currentConfig.enableBorderAnimation });
+        }
+
+        function toggleFillAnimation() {
+            currentConfig.enableFillAnimation = !currentConfig.enableFillAnimation;
+            event.target.textContent = `Fill: ${currentConfig.enableFillAnimation ? 'ON' : 'OFF'}`;
+            event.target.classList.toggle('active');
+            toast.configure({ enableFillAnimation: currentConfig.enableFillAnimation });
+        }
+
+
+        // Test functions
+        function testCustomStyling() {
+            toast.success('🎨 Custom styled toast with dark theme!', {
+                backgroundColor: '#0f172a',
+                textColor: '#f1f5f9',
+                borderColor: '#22d3ee',
+                autoDismiss: 6000
+            });
+        }
+
+        function testLongDuration() {
+            toast.info('This toast will stay for 10 seconds', {
+                autoDismiss: 10000
+            });
+        }
+
+        function testNoAutoClose() {
+            toast.warning('This toast won\'t auto-close. Click X to dismiss.', {
+                autoDismiss: 0
+            });
+        }
+
+        function testMultipleToasts() {
+            const messages = [
+                'First toast',
+                'Second toast',
+                'Third toast',
+                'Fourth toast',
+                'Fifth toast'
+            ];
+            const types = ['success', 'error', 'info', 'warning', 'success'];
+            
+            messages.forEach((message, index) => {
+                setTimeout(() => {
+                    toast[types[index]](message, { autoDismiss: 3000 });
+                }, index * 500);
+            });
+        }
+
+        function testAllDirections() {
+            const directions = ['left-to-right', 'right-to-left', 'top-to-bottom', 'bottom-to-top'];
+            const messages = [
+                'Left to Right animation',
+                'Right to Left animation',
+                'Top to Bottom animation',
+                'Bottom to Top animation'
+            ];
+            
+            directions.forEach((direction, index) => {
+                setTimeout(() => {
+                    toast.info(messages[index], {
+                        animationDirection: direction,
+                        autoDismiss: 4000
+                    });
+                }, index * 1000);
+            });
+        }
+
+        function dismissAll() {
+            toast.dismissAll();
+        }
+
+        // Helper function to update active buttons
+        function updateActiveButton(clickedButton, section) {
+            const sectionElement = clickedButton.closest('.config-section');
+            sectionElement.querySelectorAll('.config-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            clickedButton.classList.add('active');
+        }
+
+        // Helper function to update animation direction buttons
+        function updateAnimationDirectionButtons(activeDirection) {
+            // Find all animation direction buttons by their onclick attributes
+            const allButtons = document.querySelectorAll('.config-btn');
+            allButtons.forEach(btn => {
+                const onclick = btn.getAttribute('onclick');
+                if (onclick && onclick.includes('setAnimationDirection')) {
+                    btn.classList.remove('active');
+                    const btnDirection = onclick.match(/'([^']+)'/)[1];
+                    if (btnDirection === activeDirection) {
+                        btn.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        // Demo: Show a welcome message
+        setTimeout(() => {
+            toast.info('Welcome to ModernToasts! Try all the configuration options below.', {
+                autoDismiss: 6000
+            });
+        }, 1000);
+    </script>
+</body>
+</html>
