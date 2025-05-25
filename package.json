@@ -1,6 +1,6 @@
 {
   "name": "modern-toasts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "A modern, lightweight toast notification library with beautiful stacked animations and TypeScript support",
   "main": "dist/modern-toasts.cjs.js",
