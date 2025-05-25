@@ -5,7 +5,7 @@ A modern, lightweight toast notification library with beautiful stacked animatio
 [![Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://sukarth.github.io/ModernToasts-Demo/) [![npm version](https://img.shields.io/npm/v/modern-toasts)](https://www.npmjs.com/package/modern-toasts) [![bundle size](https://img.shields.io/bundlephobia/minzip/modern-toasts)](https://bundlephobia.com/package/modern-toasts) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue)](https://www.typescriptlang.org/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](https://github.com/sukarth/ModernToasts)
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/sukarth/ModernToasts/main/demo.gif" alt="ModernToasts Demo" width="600">
+  <img src="https://raw.githubusercontent.com/sukarth/ModernToasts/main/assets/demo.gif" alt="ModernToasts Demo" width="600">
 </div>
 
 ## ✨ Features

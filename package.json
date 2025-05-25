@@ -82,7 +82,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sukarth/ModernToasts.git"
+    "url": "git+https://github.com/sukarth/ModernToasts.git"
   },
   "homepage": "https://sukarth.github.io/ModernToasts-Demo/",
   "bugs": {
