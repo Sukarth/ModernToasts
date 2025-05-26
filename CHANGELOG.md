@@ -5,6 +5,122 @@ All notable changes to ModernToasts will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-05-26
+
+### 🎛️ Enhanced Pause Control & Perfect Timing
+
+This release significantly improves the pause on hover system with bulletproof timing consistency and advanced background toast control.
+
+### ✨ New Features
+
+#### **Enhanced Pause on Hover System**
+- **Background Toast Control**: New `pauseBackgroundToastsOnHover` option to pause ALL background toasts when hovering over any toast
+- **Perfect Timing Consistency**: Implemented virtual timestamp system that eliminates timing drift after multiple pause/resume cycles
+- **Individual Control**: Maintain per-toast `pauseOnHover` settings while having global background control
+
+#### **Advanced Stack Configuration**
+- **Fine-tuned Stacking**: New options for `stackOffsetY`, `stackOffsetX`, `scaleDecrementPerLevel`, and `opacityDecrementPerLevel`
+- **Real-time Configuration**: All stacking parameters now configurable at runtime
+- **Position-aware Defaults**: Intelligent default values based on toast position
+
+### 🔧 Technical Improvements
+
+#### **Bulletproof Timing System**
+- **Virtual Timestamps**: Maintains perfect timing accuracy through any number of pause/resume cycles
+- **Edge Case Handling**: Proper timing when toasts are promoted (top toast removed)
+- **Memory Efficiency**: Optimized pause state management with proper cleanup
+
+#### **Enhanced User Experience**
+- **Intuitive Behavior**: Background toasts pause when hovering over any toast (configurable)
+- **Smooth Animations**: Both timer AND animations pause together for consistent experience
+- **Flexible Control**: Global and per-toast configuration options
+
+### 🐛 Bug Fixes
+
+#### **Critical Timing Fixes**
+- **Removed Artificial Minimum**: Fixed 1000ms minimum constraint that caused toasts to live longer than configured duration
+- **Immediate Dismissal**: Toasts that have expired during pause now dismiss immediately instead of extending duration
+- **Timing Contract**: Toasts now respect exact configured `autoDismiss` duration
+
+#### **Race Condition Protection**
+- **Double-pause Prevention**: Added guards to prevent multiple pause operations on same toast
+- **State Validation**: Added defensive checks for consistent pause state (`pausedRemainingTime` + `pausedAt`)
+- **Rapid Hover Handling**: Fixed timing corruption from rapid mouse movement
+
+#### **State Consistency**
+- **Defensive Programming**: Added validation to ensure pause state consistency
+- **Memory Cleanup**: Improved cleanup of pause-related event listeners
+- **Edge Case Handling**: Better handling of edge cases in pause/resume cycles
+
+### 🎮 Playground Enhancements
+
+#### **Complete Feature Coverage**
+- **Advanced Stack Settings**: Real-time sliders for all stacking parameters
+- **Background Pause Toggle**: Test the new background pause functionality
+- **Custom Text Colors**: Fixed and enhanced custom text color support
+- **Comprehensive Testing**: All library features now accessible in playground
+
+#### **Better Organization**
+- **Improved Structure**: Playground moved to `examples/playground/` for better organization
+- **Enhanced Navigation**: Updated all links and references for new structure
+
+### 📦 Bundle Updates
+
+#### **Updated Sizes**
+- **Minified**: 41.73 KB minified (8.22 KB gzipped)
+- **UMD**: 68.60 KB minified (12.79 KB gzipped)
+- **ES Module**: 63.84 KB minified (12.45 KB gzipped)
+- **CommonJS**: 64.05 KB minified (12.51 KB gzipped)
+
+### 🔄 Migration Guide
+
+This release is **100% backward compatible**. No code changes required.
+
+#### **New Optional Features**
+```javascript
+// Enable the new background pause feature (default: true)
+toast.configure({
+  pauseBackgroundToastsOnHover: true
+});
+
+// Fine-tune stacking behavior
+toast.configure({
+  stackOffsetY: 12,
+  stackOffsetX: 6,
+  scaleDecrementPerLevel: 0.03,
+  opacityDecrementPerLevel: 0.15
+});
+```
+
+#### **Improved Behavior**
+- Toasts now respect exact configured duration (no more artificial 1s minimum)
+- Expired toasts dismiss immediately when paused
+- Perfect timing consistency through multiple pause/resume cycles
+- Background toasts pause when hovering over any toast (configurable)
+
+### 🧪 Testing
+
+- **All Tests Passing**: 77 tests continue to pass with new functionality
+- **Edge Case Coverage**: Added comprehensive testing for timing edge cases
+- **Race Condition Testing**: Verified protection against rapid hover events
+
+### 📚 Documentation Updates
+
+- **Complete API Reference**: Added all new configuration options
+- **Usage Examples**: Enhanced pause on hover examples and configuration
+- **Playground Guide**: Updated documentation for new playground location
+- **Bundle Sizes**: Updated with latest gzipped sizes
+
+### 🎯 What's Next
+
+- Mobile swipe-to-dismiss functionality
+- Additional animation easing options
+- Theme system for quick styling
+
+---
+
+**Full Changelog**: https://github.com/sukarth/ModernToasts/compare/v1.0.0...v1.1.0
+
 ## [1.0.0] - 2025-05-25
 
 ### 🎉 Initial Release
