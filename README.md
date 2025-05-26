@@ -14,7 +14,7 @@ A modern, lightweight toast notification library with beautiful stacked animatio
 - 📱 **Fully Responsive** - Works perfectly on desktop, tablet, and mobile
 - ♿ **Accessibility First** - ARIA compliant, keyboard navigation, screen reader support
 - 🎯 **TypeScript Ready** - Full type safety with excellent developer experience
-- 🪶 **Lightweight** - Only ~42KB minified (~8.2KB gzipped), zero dependencies
+- 🪶 **Lightweight** - Only ~42KB minified (~8.22KB gzipped), zero dependencies
 - 🔧 **Highly Customizable** - Themes, positions, animations, and more
 - 🚀 **Multiple Usage Methods** - Script tag, npm package, ES modules
 - 📦 **Framework Agnostic** - Works with any framework or vanilla JavaScript
@@ -370,18 +370,18 @@ ModernToasts automatically adapts to different screen sizes:
 
 ## 📦 Bundle Sizes
 
-- **Minified (recommended)**: 41.73 KB minified (8.19 KB gzipped)
-- **UMD (script tag)**: 68.60 KB minified (12.72 KB gzipped)
-- **ES Module**: 63.84 KB minified (12.38 KB gzipped)
-- **CommonJS**: 64.05 KB minified (12.45 KB gzipped)
+- **Minified (recommended)**: 41.73 KB minified (8.22 KB gzipped)
+- **UMD (script tag)**: 68.60 KB minified (12.79 KB gzipped)
+- **ES Module**: 63.84 KB minified (12.45 KB gzipped)
+- **CommonJS**: 64.05 KB minified (12.51 KB gzipped)
 
 ### Pre-compressed Files
 
 All build outputs include pre-compressed `.gz` files for optimal CDN delivery:
-- `modern-toasts.min.js.gz` - 8.19 KB
-- `modern-toasts.umd.js.gz` - 12.72 KB
-- `modern-toasts.esm.js.gz` - 12.38 KB
-- `modern-toasts.cjs.js.gz` - 12.45 KB
+- `modern-toasts.min.js.gz` - 8.22 KB
+- `modern-toasts.umd.js.gz` - 12.79 KB
+- `modern-toasts.esm.js.gz` - 12.45 KB
+- `modern-toasts.cjs.js.gz` - 12.51 KB
 
 ## 🔄 Migration from Other Libraries
 

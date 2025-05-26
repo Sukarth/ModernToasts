@@ -326,7 +326,11 @@ export class ModernToasts implements ModernToastsAPI {
           } else {
             // First time pausing, calculate from creation time
             const elapsed = Date.now() - toastData.createdAt;
-            toastData.pausedRemainingTime = Math.max(1000, toastData.options.autoDismiss - elapsed);
+            toastData.pausedRemainingTime = Math.max(0, toastData.options.autoDismiss - elapsed);
+            if (toastData.pausedRemainingTime <= 0) {
+              this.removeToast(toastData.id);
+              return;
+            }
           }
 
           toastData.pausedAt = Date.now();
@@ -343,7 +347,7 @@ export class ModernToasts implements ModernToastsAPI {
 
       const mouseLeaveListener = (): void => {
         // Resume current toast timer
-        if (toastData.pausedRemainingTime && !toastData.isRemoving && toastData.options.autoDismiss > 0) {
+        if (toastData.pausedRemainingTime && toastData.pausedAt && !toastData.isRemoving && toastData.options.autoDismiss > 0) {
           const remainingTime = toastData.pausedRemainingTime;
           toastData.timer = window.setTimeout(() => {
             this.removeToast(toastData.id);
@@ -653,6 +657,11 @@ export class ModernToasts implements ModernToastsAPI {
   private pauseBackgroundToasts(hoveredToastId: string): void {
     this.toasts.forEach(toast => {
       if (toast.id !== hoveredToastId && toast.element && toast.options.pauseOnHover && toast.options.autoDismiss > 0) {
+        // Skip if already paused
+        if (toast.element.classList.contains('toast-paused')) {
+          return;
+        }
+
         // Pause animations
         toast.element.classList.add('toast-paused');
 
@@ -667,7 +676,11 @@ export class ModernToasts implements ModernToastsAPI {
           } else {
             // First time pausing, calculate from creation time
             const elapsed = Date.now() - toast.createdAt;
-            toast.pausedRemainingTime = Math.max(1000, toast.options.autoDismiss - elapsed);
+            toast.pausedRemainingTime = Math.max(0, toast.options.autoDismiss - elapsed);
+            if (toast.pausedRemainingTime <= 0) {
+              this.removeToast(toast.id);
+              return;
+            }
           }
 
           toast.pausedAt = Date.now();
@@ -683,11 +696,16 @@ export class ModernToasts implements ModernToastsAPI {
   private resumeBackgroundToasts(hoveredToastId: string): void {
     this.toasts.forEach(toast => {
       if (toast.id !== hoveredToastId && toast.element && toast.options.pauseOnHover && toast.options.autoDismiss > 0) {
+        // Skip if not paused
+        if (!toast.element.classList.contains('toast-paused')) {
+          return;
+        }
+
         // Resume animations
         toast.element.classList.remove('toast-paused');
 
         // Resume timer if it was paused
-        if (toast.pausedRemainingTime && !toast.isRemoving) {
+        if (toast.pausedRemainingTime && toast.pausedAt && !toast.isRemoving) {
           const remainingTime = toast.pausedRemainingTime;
           toast.timer = window.setTimeout(() => {
             this.removeToast(toast.id);
