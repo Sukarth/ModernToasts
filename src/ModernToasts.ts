@@ -71,7 +71,8 @@ const DEFAULT_CONFIG: Required<ToastConfig> = {
   enableBorderAnimation: true,
   enableFillAnimation: true,
   animationDirection: getDefaultAnimationDirection('bottom-right'),
-  customCSS: ''
+  customCSS: '',
+  pauseBackgroundToastsOnHover: true
 };
 
 /**
@@ -313,24 +314,55 @@ export class ModernToasts implements ModernToastsAPI {
 
     // Pause on hover functionality
     if (toastData.options.pauseOnHover && toastData.options.autoDismiss > 0) {
-      let remainingTime = toastData.options.autoDismiss;
-      let _pauseStartTime: number;
-
       const mouseEnterListener = (): void => {
+        // Pause current toast timer
         if (toastData.timer) {
           clearTimeout(toastData.timer);
-          _pauseStartTime = Date.now();
+
+          // Calculate remaining time based on current state
+          if (toastData.pausedRemainingTime) {
+            // Toast was previously paused, keep the stored remaining time
+            // No change needed
+          } else {
+            // First time pausing, calculate from creation time
+            const elapsed = Date.now() - toastData.createdAt;
+            toastData.pausedRemainingTime = Math.max(1000, toastData.options.autoDismiss - elapsed);
+          }
+
+          toastData.pausedAt = Date.now();
+          toastData.timer = undefined;
+        }
+        // Pause animations by adding CSS class to current toast
+        toastEl.classList.add('toast-paused');
+
+        // Pause background toasts if configured to do so
+        if (this.config.pauseBackgroundToastsOnHover) {
+          this.pauseBackgroundToasts(toastData.id);
         }
       };
 
       const mouseLeaveListener = (): void => {
-        if (toastData.options.autoDismiss > 0 && !toastData.isRemoving) {
-          const elapsed = Date.now() - toastData.createdAt;
-          remainingTime = Math.max(1000, toastData.options.autoDismiss - elapsed);
-
+        // Resume current toast timer
+        if (toastData.pausedRemainingTime && !toastData.isRemoving && toastData.options.autoDismiss > 0) {
+          const remainingTime = toastData.pausedRemainingTime;
           toastData.timer = window.setTimeout(() => {
             this.removeToast(toastData.id);
           }, remainingTime);
+
+          // Update the creation time to maintain consistency for future calculations
+          // New "virtual" creation time = now - (original duration - remaining time)
+          toastData.createdAt = Date.now() - (toastData.options.autoDismiss - remainingTime);
+
+          // Clear pause tracking
+          toastData.pausedRemainingTime = undefined;
+          toastData.pausedAt = undefined;
+        }
+        // Resume animations by removing CSS class from current toast
+        toastEl.classList.remove('toast-paused');
+
+        // Resume background toasts if configured to do so
+        if (this.config.pauseBackgroundToastsOnHover) {
+          this.resumeBackgroundToasts(toastData.id);
         }
       };
 
@@ -566,6 +598,10 @@ export class ModernToasts implements ModernToastsAPI {
       toastData.timer = undefined;
     }
 
+    // Clean up pause tracking data
+    toastData.pausedRemainingTime = undefined;
+    toastData.pausedAt = undefined;
+
     // Clean up event listeners
     this.cleanupToastEventListeners(toastData);
 
@@ -609,6 +645,64 @@ export class ModernToasts implements ModernToastsAPI {
         toastData.element.removeEventListener('mouseleave', toastData.mouseLeaveListener);
       }
     }
+  }
+
+  /**
+   * Pause background toasts (all toasts except the hovered one)
+   */
+  private pauseBackgroundToasts(hoveredToastId: string): void {
+    this.toasts.forEach(toast => {
+      if (toast.id !== hoveredToastId && toast.element && toast.options.pauseOnHover && toast.options.autoDismiss > 0) {
+        // Pause animations
+        toast.element.classList.add('toast-paused');
+
+        // Pause timer if it exists
+        if (toast.timer) {
+          clearTimeout(toast.timer);
+
+          // Calculate remaining time based on current state
+          if (toast.pausedRemainingTime) {
+            // Toast was previously paused, keep the stored remaining time
+            // No change needed
+          } else {
+            // First time pausing, calculate from creation time
+            const elapsed = Date.now() - toast.createdAt;
+            toast.pausedRemainingTime = Math.max(1000, toast.options.autoDismiss - elapsed);
+          }
+
+          toast.pausedAt = Date.now();
+          toast.timer = undefined;
+        }
+      }
+    });
+  }
+
+  /**
+   * Resume background toasts (all toasts except the hovered one)
+   */
+  private resumeBackgroundToasts(hoveredToastId: string): void {
+    this.toasts.forEach(toast => {
+      if (toast.id !== hoveredToastId && toast.element && toast.options.pauseOnHover && toast.options.autoDismiss > 0) {
+        // Resume animations
+        toast.element.classList.remove('toast-paused');
+
+        // Resume timer if it was paused
+        if (toast.pausedRemainingTime && !toast.isRemoving) {
+          const remainingTime = toast.pausedRemainingTime;
+          toast.timer = window.setTimeout(() => {
+            this.removeToast(toast.id);
+          }, remainingTime);
+
+          // Update the creation time to maintain consistency for future calculations
+          // New "virtual" creation time = now - (original duration - remaining time)
+          toast.createdAt = Date.now() - (toast.options.autoDismiss - remainingTime);
+
+          // Clean up pause tracking
+          toast.pausedRemainingTime = undefined;
+          toast.pausedAt = undefined;
+        }
+      }
+    });
   }
 
   /**

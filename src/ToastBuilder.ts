@@ -244,6 +244,8 @@ export class ToastBuilder {
 
     if (textColor) {
       this.toastEl.style.color = textColor;
+      // Store text color to apply after elements are added to DOM
+      this.toastEl.setAttribute('data-custom-text-color', textColor);
     }
 
     if (borderColor) {
@@ -268,6 +270,22 @@ export class ToastBuilder {
   build(): HTMLElement {
     // Append all fragments to the toast element
     this.toastEl.appendChild(this.fragment);
+
+    // Apply custom text color after elements are in DOM
+    const customTextColor = this.toastEl.getAttribute('data-custom-text-color');
+    if (customTextColor) {
+      const titleElement = this.toastEl.querySelector(`.${CSS_CLASSES.TOAST_TITLE}`) as HTMLElement;
+      const messageElement = this.toastEl.querySelector(`.${CSS_CLASSES.TOAST_MESSAGE}`) as HTMLElement;
+      if (titleElement) {
+        titleElement.style.color = customTextColor;
+      }
+      if (messageElement) {
+        messageElement.style.color = customTextColor;
+      }
+      // Remove the temporary attribute
+      this.toastEl.removeAttribute('data-custom-text-color');
+    }
+
     return this.toastEl;
   }
 }

@@ -105,6 +105,9 @@ export interface ToastConfig {
 
   /** Custom CSS to inject */
   customCSS?: string;
+
+  /** Whether to pause background toasts when hovering over any toast (default: true) */
+  pauseBackgroundToastsOnHover?: boolean;
 }
 
 /**
@@ -123,6 +126,9 @@ export interface ToastData {
   closeButtonListener?: EventListener;
   mouseEnterListener?: EventListener;
   mouseLeaveListener?: EventListener;
+  // Pause tracking for background toasts
+  pausedRemainingTime?: number;
+  pausedAt?: number;
 }
 
 /**

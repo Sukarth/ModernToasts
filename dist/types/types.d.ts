@@ -70,6 +70,8 @@ export interface ToastConfig {
     animationDirection?: AnimationDirection;
     /** Custom CSS to inject */
     customCSS?: string;
+    /** Whether to pause background toasts when hovering over any toast (default: true) */
+    pauseBackgroundToastsOnHover?: boolean;
 }
 /**
  * Internal toast data structure
@@ -87,6 +89,8 @@ export interface ToastData {
     closeButtonListener?: EventListener;
     mouseEnterListener?: EventListener;
     mouseLeaveListener?: EventListener;
+    pausedRemainingTime?: number;
+    pausedAt?: number;
 }
 /**
  * Toast event types

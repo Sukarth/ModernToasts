@@ -68,6 +68,14 @@ export declare class ModernToasts implements ModernToastsAPI {
      */
     private cleanupToastEventListeners;
     /**
+     * Pause background toasts (all toasts except the hovered one)
+     */
+    private pauseBackgroundToasts;
+    /**
+     * Resume background toasts (all toasts except the hovered one)
+     */
+    private resumeBackgroundToasts;
+    /**
      * Emit event to listeners
      */
     private emit;

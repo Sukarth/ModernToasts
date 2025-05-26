@@ -333,6 +333,8 @@
             }
             if (textColor) {
                 this.toastEl.style.color = textColor;
+                // Store text color to apply after elements are added to DOM
+                this.toastEl.setAttribute('data-custom-text-color', textColor);
             }
             if (borderColor) {
                 this.toastEl.style.borderColor = borderColor;
@@ -353,6 +355,20 @@
         build() {
             // Append all fragments to the toast element
             this.toastEl.appendChild(this.fragment);
+            // Apply custom text color after elements are in DOM
+            const customTextColor = this.toastEl.getAttribute('data-custom-text-color');
+            if (customTextColor) {
+                const titleElement = this.toastEl.querySelector(`.${CSS_CLASSES.TOAST_TITLE}`);
+                const messageElement = this.toastEl.querySelector(`.${CSS_CLASSES.TOAST_MESSAGE}`);
+                if (titleElement) {
+                    titleElement.style.color = customTextColor;
+                }
+                if (messageElement) {
+                    messageElement.style.color = customTextColor;
+                }
+                // Remove the temporary attribute
+                this.toastEl.removeAttribute('data-custom-text-color');
+            }
             return this.toastEl;
         }
     }
@@ -402,7 +418,8 @@
         enableBorderAnimation: true,
         enableFillAnimation: true,
         animationDirection: getDefaultAnimationDirection('bottom-right'),
-        customCSS: ''
+        customCSS: '',
+        pauseBackgroundToastsOnHover: true
     };
     /**
      * Default toast options
@@ -504,6 +521,15 @@
 
 .no-fill-animation .fill-progress {
   animation: none !important;
+}
+
+/* Animation pause classes for hover functionality */
+.toast-paused .border-element {
+  animation-play-state: paused !important;
+}
+
+.toast-paused .fill-progress {
+  animation-play-state: paused !important;
 }
 
 /* CSS Custom Properties for Configuration */
@@ -2038,19 +2064,46 @@
             }
             // Pause on hover functionality
             if (toastData.options.pauseOnHover && toastData.options.autoDismiss > 0) {
-                let remainingTime = toastData.options.autoDismiss;
                 const mouseEnterListener = () => {
+                    // Pause current toast timer
                     if (toastData.timer) {
                         clearTimeout(toastData.timer);
+                        // Calculate remaining time based on current state
+                        if (toastData.pausedRemainingTime) ;
+                        else {
+                            // First time pausing, calculate from creation time
+                            const elapsed = Date.now() - toastData.createdAt;
+                            toastData.pausedRemainingTime = Math.max(1000, toastData.options.autoDismiss - elapsed);
+                        }
+                        toastData.pausedAt = Date.now();
+                        toastData.timer = undefined;
+                    }
+                    // Pause animations by adding CSS class to current toast
+                    toastEl.classList.add('toast-paused');
+                    // Pause background toasts if configured to do so
+                    if (this.config.pauseBackgroundToastsOnHover) {
+                        this.pauseBackgroundToasts(toastData.id);
                     }
                 };
                 const mouseLeaveListener = () => {
-                    if (toastData.options.autoDismiss > 0 && !toastData.isRemoving) {
-                        const elapsed = Date.now() - toastData.createdAt;
-                        remainingTime = Math.max(1000, toastData.options.autoDismiss - elapsed);
+                    // Resume current toast timer
+                    if (toastData.pausedRemainingTime && !toastData.isRemoving && toastData.options.autoDismiss > 0) {
+                        const remainingTime = toastData.pausedRemainingTime;
                         toastData.timer = window.setTimeout(() => {
                             this.removeToast(toastData.id);
                         }, remainingTime);
+                        // Update the creation time to maintain consistency for future calculations
+                        // New "virtual" creation time = now - (original duration - remaining time)
+                        toastData.createdAt = Date.now() - (toastData.options.autoDismiss - remainingTime);
+                        // Clear pause tracking
+                        toastData.pausedRemainingTime = undefined;
+                        toastData.pausedAt = undefined;
+                    }
+                    // Resume animations by removing CSS class from current toast
+                    toastEl.classList.remove('toast-paused');
+                    // Resume background toasts if configured to do so
+                    if (this.config.pauseBackgroundToastsOnHover) {
+                        this.resumeBackgroundToasts(toastData.id);
                     }
                 };
                 toastEl.addEventListener('mouseenter', mouseEnterListener);
@@ -2244,6 +2297,9 @@
                 clearTimeout(toastData.timer);
                 toastData.timer = undefined;
             }
+            // Clean up pause tracking data
+            toastData.pausedRemainingTime = undefined;
+            toastData.pausedAt = undefined;
             // Clean up event listeners
             this.cleanupToastEventListeners(toastData);
             // Emit dismiss event
@@ -2281,6 +2337,54 @@
                     toastData.element.removeEventListener('mouseleave', toastData.mouseLeaveListener);
                 }
             }
+        }
+        /**
+         * Pause background toasts (all toasts except the hovered one)
+         */
+        pauseBackgroundToasts(hoveredToastId) {
+            this.toasts.forEach(toast => {
+                if (toast.id !== hoveredToastId && toast.element && toast.options.pauseOnHover && toast.options.autoDismiss > 0) {
+                    // Pause animations
+                    toast.element.classList.add('toast-paused');
+                    // Pause timer if it exists
+                    if (toast.timer) {
+                        clearTimeout(toast.timer);
+                        // Calculate remaining time based on current state
+                        if (toast.pausedRemainingTime) ;
+                        else {
+                            // First time pausing, calculate from creation time
+                            const elapsed = Date.now() - toast.createdAt;
+                            toast.pausedRemainingTime = Math.max(1000, toast.options.autoDismiss - elapsed);
+                        }
+                        toast.pausedAt = Date.now();
+                        toast.timer = undefined;
+                    }
+                }
+            });
+        }
+        /**
+         * Resume background toasts (all toasts except the hovered one)
+         */
+        resumeBackgroundToasts(hoveredToastId) {
+            this.toasts.forEach(toast => {
+                if (toast.id !== hoveredToastId && toast.element && toast.options.pauseOnHover && toast.options.autoDismiss > 0) {
+                    // Resume animations
+                    toast.element.classList.remove('toast-paused');
+                    // Resume timer if it was paused
+                    if (toast.pausedRemainingTime && !toast.isRemoving) {
+                        const remainingTime = toast.pausedRemainingTime;
+                        toast.timer = window.setTimeout(() => {
+                            this.removeToast(toast.id);
+                        }, remainingTime);
+                        // Update the creation time to maintain consistency for future calculations
+                        // New "virtual" creation time = now - (original duration - remaining time)
+                        toast.createdAt = Date.now() - (toast.options.autoDismiss - remainingTime);
+                        // Clean up pause tracking
+                        toast.pausedRemainingTime = undefined;
+                        toast.pausedAt = undefined;
+                    }
+                }
+            });
         }
         /**
          * Emit event to listeners

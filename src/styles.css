@@ -9,6 +9,15 @@
   animation: none !important;
 }
 
+/* Animation pause classes for hover functionality */
+.toast-paused .border-element {
+  animation-play-state: paused !important;
+}
+
+.toast-paused .fill-progress {
+  animation-play-state: paused !important;
+}
+
 /* CSS Custom Properties for Configuration */
 :root {
   --duration: 3s;
